@@ -34,7 +34,7 @@ def get_file_content(working_directory, file_path):
         result = ""
 
         if not (absolute_path.startswith(parent_absolute_path)):
-            return (f"Error: Cannot list \"{directory}\" as it is outside the permitted working directory ")
+            return (f"Error: Cannot read \"{directory}\" as it is outside the permitted working directory ")
         if not os.path.isfile(path):
             return f"Error: File not found or is not a regular file: \"{file_path}\""
 
