@@ -3,6 +3,7 @@ import sys
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from functions.get_files_info import get_files_info
 
 messages = []
 
@@ -22,6 +23,9 @@ def main():
     messages.append(
         types.Content(role="user", parts=[types.Part(text=prompt)])
     )
+    print(get_files_info(os.getcwd(), "./calculator"))
+
+    return 
 
     client = genai.Client(api_key= api_key)
     response = client.models.generate_content(model= "gemini-2.0-flash-001", contents=messages )
@@ -31,7 +35,6 @@ def main():
         print(f"User prompt: {prompt}")
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
-
 
 
 if __name__ == "__main__":
