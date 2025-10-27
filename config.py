@@ -1,0 +1,2 @@
+
+FILE_MAX_CHARS = 10000
