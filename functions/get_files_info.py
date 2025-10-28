@@ -16,6 +16,20 @@ schema_get_files_info = types.FunctionDeclaration(
     )
 )
 
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="Read the content of a file and chunk it to {FILE_MAX_CHARS} characters if it overflows that number of characters",
+    parameters = types.Schema(
+        type= types.Type.OBJECT,
+        properties= {
+            "file_path": types.Schema(
+                type= types.Type.STRING,
+                description= "The file to read content from, relative to the working directory. The parameter is required",
+            )
+        }
+    )
+)
+
 
 def get_files_info(working_directory, directory="."):
     # instead of throwing errors we want to return error strings
