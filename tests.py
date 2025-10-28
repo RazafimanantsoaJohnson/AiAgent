@@ -48,7 +48,6 @@ if __name__ == "__main__":
     # test_get_files_info()
     # test_get_files_content()
     # test_write_file()
-    # result = subprocess.run(["ls"], timeout=50, capture_output = True, text=True)
-    # print(result)
+    
     test_run_python_file()
 
