@@ -6,6 +6,7 @@ from google.genai import types
 from functions.get_files_info import get_files_info, schema_get_files_info, schema_get_file_content
 from functions.run_code import schema_run_python_file
 from functions.write_file import schema_write_file
+from call_functions import call_function
 
 messages = []
 
@@ -52,8 +53,10 @@ def main():
     response = client.models.generate_content(
         model= "gemini-2.0-flash-001", contents=messages, config= config
     )
+
+    isVerboseSet = supported_params[0] in sys.argv
     
-    if supported_params[0] in sys.argv:
+    if isVerboseSet:
         print(f"User prompt: {prompt}")
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
@@ -63,8 +66,13 @@ def main():
         return
     
     for function_call in response.function_calls:
-        print(f"Calling function: {function_call.name}({function_call.args})")
-    
+        function_call_result = call_function(function_call ,isVerboseSet)
+        if function_call_result.parts[0].function_response.response == None:
+            raise Exception(f"Something went wrong when calling the function: {function_call_result}")
+        
+        if isVerboseSet:
+            print(f"-> {function_call_result.parts[0].function_response.response}")
+
 
 
 if __name__ == "__main__":

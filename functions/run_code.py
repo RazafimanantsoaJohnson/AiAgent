@@ -18,31 +18,12 @@ schema_run_python_file = types.FunctionDeclaration(
                 items= types.Schema(
                     type= types.Type.STRING,
                     description= "Optional argument to pass to the python file"
-                
                 ),
                 description= "An array of strings defining the arguments to pass to the python run command. Not mandatory (send an empty array as a zero value)"
             )
         }
     )
 )
-
-# types.FunctionDeclaration(
-#     name="write_file",
-#     description="Write content into a specific file; it will create the file if it doesn't exist. Will mostly be used to write python code to modify codebase in our case.",
-#     parameters = types.Schema(
-#         type= types.Type.OBJECT,
-#         properties= {
-#             "file_path": types.Schema(
-#                 type= types.Type.STRING,
-#                 description= "Required parameter to specify the file to write into; can be a non-existent file.",
-#             ),
-#             "content": types.Schema(
-#                 type= types.Type.STRING,
-#                 description= "The content to write in the defined by file_path."
-#             )
-#         }
-#     )
-# )
 
 
 def run_python_file(working_directory, file_path, args=[]):
