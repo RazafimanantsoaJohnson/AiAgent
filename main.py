@@ -15,7 +15,9 @@ supported_params = ["--verbose"]
 system_prompt = """
 You are a helpful AI coding agent.
 
-When a user asks a question or makes a request, make a function call plan. You can perform the following operations:
+When a user asks a question or makes a request, make a function call plan; and keep making function calls until you can produce a final natural-language answer.
+Feel free to call as many functions as you need to finally come up with the answer.
+You can perform the following operations:
 
 - List files and directories
 - Read file contents
@@ -52,13 +54,11 @@ def main():
             tools= [available_functions], system_instruction= system_prompt
         )
 
-        for i in range(20):
+        for i in range(5):
+            print(i)
             response = client.models.generate_content(
                 model= "gemini-2.0-flash-001", contents=messages, config= config
             )
-
-            if response.text != None:
-                break
 
             isVerboseSet = supported_params[0] in sys.argv
 
@@ -72,13 +72,7 @@ def main():
                 print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
                 print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
             
-            if len(response.function_calls) == 0:
-                print(response.text)
-                break
-                # return
-            
             for function_call in response.function_calls:
-                print(function_call.name)
                 function_call_result = call_function(function_call ,isVerboseSet)
                 if function_call_result.parts[0].function_response.response == None:
                     raise Exception(f"Something went wrong when calling the function: {function_call_result}")
@@ -88,6 +82,11 @@ def main():
                 messages.append(
                     types.Content(role="user" ,parts=[types.Part(text=f"{function_call_result}")])
                 )
+                
+            if response.text != None:
+                print(response.text)
+                break
+
 
     except Exception as e:
         raise e

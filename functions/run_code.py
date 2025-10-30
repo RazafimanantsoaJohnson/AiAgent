@@ -34,13 +34,13 @@ def run_python_file(working_directory, file_path, args=[]):
         execution_result = ""
 
         if not (absolute_path.startswith(parent_absolute_path)):
-            return f"Error: Cannot execute \"{path}\" as it is outside the permitted working directory "
+            return f"Error: Cannot execute \"{str(path)}\" as it is outside the permitted working directory "
 
         if not (os.path.isfile(path)):
-            return f"Error: File \"{file_path}\" not found."
+            return f"Error: File \"{str(file_path)}\" not found."
         
         if not file_path.endswith(".py"):
-            return f"Error: \"{file_path}\" is not a python file."
+            return f"Error: \"{str(file_path)}\" is not a python file."
 
         cmd = ["python",absolute_path]
         cmd.extend(args)
@@ -49,16 +49,17 @@ def run_python_file(working_directory, file_path, args=[]):
 
         result_stdout= result.stdout
         result_stderr = result.stderr
+        
         execution_result += f"STDOUT:{result_stdout}\nSTDERR:{result_stderr}"
 
         if result.returncode != 0:
             execution_result += f"Process exited with code {result.returncode}\n"
-        if result_stdout == "":
+        if result_stdout == None or result_stdout != "":
             execution_result += "No output produced"
 
         return execution_result
 
     except Exception as e:
-        return f"Error: executing Python file: \"{e}\""
+        return f"Error: executing Python file: \"{str(e)}\""
 
         

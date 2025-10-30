@@ -18,7 +18,7 @@ schema_get_files_info = types.FunctionDeclaration(
 
 schema_get_file_content = types.FunctionDeclaration(
     name="get_file_content",
-    description="Read the content of a file and chunk it to {FILE_MAX_CHARS} characters if it overflows that number of characters",
+    description="Read the content of a file at a given path",
     parameters = types.Schema(
         type= types.Type.OBJECT,
         properties= {
@@ -61,6 +61,8 @@ def get_file_content(working_directory, file_path):
         parent_absolute_path = os.path.abspath(working_directory)
         absolute_path = os.path.abspath(path)
         result = ""
+
+        print("- Calling function: get_file_content")
 
         if not (absolute_path.startswith(parent_absolute_path)):
             return (f"Error: Cannot read \"{directory}\" as it is outside the permitted working directory ")
